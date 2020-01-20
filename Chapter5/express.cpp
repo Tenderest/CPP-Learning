@@ -1,0 +1,20 @@
+// express.cpp -- values of expressions
+#include <iostream>
+int main(void)
+{
+        using namespace std;
+        int x;
+        cout << "The expression x = 100 has the value ";
+        cout << (x = 100) << endl;
+        cout << "Now x = " << x << endl;
+        cout << "The expression x < 3 has the value ";
+        cout << (x < 3) << endl;
+        cout << "The expression x > 3 has the value ";
+        cout << (x > 3) << endl;
+        cout.setf(ios_base::boolalpha); // 一个较新的c++特性 a newer C++ feature
+        cout << "The expression x < 3 has the value ";
+        cout << (x < 3) << endl;
+        cout << "The expression x > 3 has the value ";
+        cout << (x > 3) << endl;
+        return 0;
+}

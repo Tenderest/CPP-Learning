@@ -3,6 +3,7 @@
 op_num=$# # 参数个数
 min=1
 execute_filename=""
+dir_name="out"
 filename=$1 # 文件名
 filenames="" # 多文件名
 base_name=${filename#*.} # 去前缀名，取后缀
@@ -18,7 +19,8 @@ done
 
 execute_file() {
 	# ./out/$1
-	./out/$execute_filename
+	# ./out/$execute_filename
+	$dir_name/$execute_filename
 }
 
 compile_c() {
@@ -27,7 +29,7 @@ compile_c() {
 	execute_filename=$cfile".out"
 	echo "编译的文件名："$filenames
 	echo "执行的文件名："$execute_filename
-	gcc $filenames -o ./out/$execute_filename -std=c11
+	gcc $filenames -o $dir_name/$execute_filename -std=c11
 	# ./out/$execute_filename
 }
 
@@ -37,7 +39,7 @@ compile_cpp() {
 	execute_filename=$cppfile".out"
 	echo "编译的文件名："$filenames
 	echo "执行的文件名："$execute_filename
-	g++ $filenames -o ./out/$execute_filename -std=c++11
+	g++ $filenames -o $dir_name/$execute_filename -std=c++11
 	# ./out/$execute_filename
 }
 
@@ -78,12 +80,29 @@ compile() {
 	echo "编译动作结束"
 }
 
+check_out_dir() {
+	
+	# if [ $(find . -name "out" -type d) ]
+	if [ -d $dir_name ]
+	then
+		# 存在 out 文件夹
+		# echo "aaa"
+		echo "out 文件夹存在"
+	else
+		# echo "No no"
+		echo "out 文件夹不存在，已经创建"
+		mkdir $dir_name
+	fi
+}
+
+# 检测当前目录有没有 out 文件夹
+check_out_dir
 # compile $base_name $op_num
 compile
 echo ""
-echo "-- Start"
-execute_file
-echo "-- Stop"
+echo "--------- Start ---------"
+time execute_file
+echo "---------  Stop ---------"
 
 
 # if [ $base_name == "c" ] then

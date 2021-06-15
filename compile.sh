@@ -23,6 +23,7 @@ execute_file() {
 	read -n 1 -p "execute executable file? (y/n)" reply
 	if [ $reply == "y" ]
 	then
+		echo ""
 		$dir_name/$execute_filename
 	fi
 }

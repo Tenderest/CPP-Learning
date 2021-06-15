@@ -20,7 +20,11 @@ done
 execute_file() {
 	# ./out/$1
 	# ./out/$execute_filename
-	$dir_name/$execute_filename
+	read -n 1 -p "execute executable file? (y/n)" reply
+	if [ $reply == "y" ]
+	then
+		$dir_name/$execute_filename
+	fi
 }
 
 compile_c() {
@@ -28,7 +32,7 @@ compile_c() {
 	cfile=$(basename $filename .c)
 	execute_filename=$cfile".out"
 	echo "编译的文件名："$filenames
-	echo "执行的文件名："$execute_filename
+	echo "执行的文件名："$dir_name/$execute_filename
 	gcc $filenames -o $dir_name/$execute_filename -std=c11
 	# ./out/$execute_filename
 }
@@ -38,7 +42,7 @@ compile_cpp() {
 	cppfile=$(basename $filename .cpp)
 	execute_filename=$cppfile".out"
 	echo "编译的文件名："$filenames
-	echo "执行的文件名："$execute_filename
+	echo "执行的文件名："$dir_name/$execute_filename
 	g++ $filenames -o $dir_name/$execute_filename -std=c++11
 	# ./out/$execute_filename
 }
@@ -95,14 +99,27 @@ check_out_dir() {
 	fi
 }
 
-# 检测当前目录有没有 out 文件夹
-check_out_dir
-# compile $base_name $op_num
-compile
-echo ""
-echo "--------- Start ---------"
-time execute_file
-echo "---------  Stop ---------"
+clean_outfile() {
+	if [ $filename == "clean" ]
+	then
+		rm -rf $dir_name/*
+	fi
+}
+
+if [ $1 == "clean" ]
+then
+	clean_outfile
+	echo "清空输出文件目录成功。"
+else
+	# 检测当前目录有没有 out 文件夹
+	check_out_dir
+	# compile $base_name $op_num
+	compile
+	echo ""
+	echo "--------- Start ---------"
+	time execute_file
+	echo "---------  Stop ---------"
+fi
 
 
 # if [ $base_name == "c" ] then
